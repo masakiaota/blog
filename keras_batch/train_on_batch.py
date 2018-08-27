@@ -22,21 +22,20 @@ def lenet(input_shape, num_classes):
 
     # フィルターを6枚用意, 小窓のサイズ5×5, paddingによって入力と出力の画像サイズは同じ
     model.add(Conv2D(
-        6, kernel_size=5, padding="same",
+        20, kernel_size=5, padding="same",
         input_shape=input_shape, activation="relu",
-        init="he_uniform"
     ))
     # 2, 2でマックスプーリング
     model.add(MaxPooling2D(pool_size=(2, 2)))
     # 再度畳み込み、深い層ほどフィルターを増やすのはテクニック
-    model.add(Conv2D(16, kernel_size=5, padding="same",
-                     activation="relu", init="he_uniform"))
+    model.add(Conv2D(50, kernel_size=5, padding="same",
+                     activation="relu", ))
     model.add(MaxPooling2D(pool_size=(2, 2)))
     # Flatten()はマトリックスを1次元ベクトルに変換する層
     # FCにつなぐために必要
     model.add(Flatten())
-    model.add(Dense(120, activation="relu", init="he_normal"))
-    model.add(Dense(64, activation="relu", init="he_normal"))
+    # model.add(Dense(120, activation="relu", init="he_normal"))
+    model.add(Dense(500, activation="relu", init="he_normal"))
     model.add(Dense(num_classes, init="he_normal"))
     model.add(Activation("softmax"))
     model.summary()
@@ -89,7 +88,7 @@ for epoch in range(N_EPOCHS):
     print("=" * 50)
     print(epoch, "/", N_EPOCHS)
     acc = []
-    for X_batch, Y_batch in get_batch(1000):
+    for X_batch, Y_batch in get_batch(512):
         model.train_on_batch(X_batch, Y_batch)
         score = model.evaluate(X_batch, Y_batch)
         print("batch accuracy:", score[1])
@@ -101,629 +100,910 @@ for epoch in range(N_EPOCHS):
 
 
 """
-引数の名前がinitからkernel_initializerに変わってるみたいで、怒られてる
+result
 
-
-Using TensorFlow backend.
-loading X_test...
-train_on_batch.py:27: UserWarning: Update your `Conv2D` call to the Keras 2 API: `Conv2D(6, kernel_size=5, padding="same", input_shape=(28, 28, 1..., activation="relu", kernel_initializer="he_uniform")`
-  init="he_uniform"
-train_on_batch.py:33: UserWarning: Update your `Conv2D` call to the Keras 2 API: `Conv2D(16, kernel_size=5, padding="same", activation="relu", kernel_initializer="he_uniform")`
-  activation="relu", init="he_uniform"))
-train_on_batch.py:38: UserWarning: Update your `Dense` call to the Keras 2 API: `Dense(120, activation="relu", kernel_initializer="he_normal")`
-  model.add(Dense(120, activation="relu", init="he_normal"))
-train_on_batch.py:39: UserWarning: Update your `Dense` call to the Keras 2 API: `Dense(64, activation="relu", kernel_initializer="he_normal")`
-  model.add(Dense(64, activation="relu", init="he_normal"))
-train_on_batch.py:40: UserWarning: Update your `Dense` call to the Keras 2 API: `Dense(10, kernel_initializer="he_normal")`
-  model.add(Dense(num_classes, init="he_normal"))
-_________________________________________________________________
-Layer (type)                 Output Shape              Param #
-=================================================================
-conv2d_1 (Conv2D)            (None, 28, 28, 6)         156
-_________________________________________________________________
-max_pooling2d_1 (MaxPooling2 (None, 14, 14, 6)         0
-_________________________________________________________________
-conv2d_2 (Conv2D)            (None, 14, 14, 16)        2416
-_________________________________________________________________
-max_pooling2d_2 (MaxPooling2 (None, 7, 7, 16)          0
-_________________________________________________________________
-flatten_1 (Flatten)          (None, 784)               0
-_________________________________________________________________
-dense_1 (Dense)              (None, 120)               94200
-_________________________________________________________________
-dense_2 (Dense)              (None, 64)                7744
-_________________________________________________________________
-dense_3 (Dense)              (None, 10)                650
-_________________________________________________________________
-activation_1 (Activation)    (None, 10)                0
-=================================================================
-Total params: 105,166
-Trainable params: 105,166
-Non-trainable params: 0
-_________________________________________________________________
-==================================================
-0 / 5
-doing 0 / 37
-1000/1000 [==============================] - 0s 381us/step
-batch accuracy: 0.07
-doing 1 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.156
-doing 2 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.18
-doing 3 / 37
-1000/1000 [==============================] - 0s 280us/step
-batch accuracy: 0.228
-doing 4 / 37
-1000/1000 [==============================] - 0s 294us/step
-batch accuracy: 0.321
-doing 5 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.436
-doing 6 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.534
-doing 7 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.594
-doing 8 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.622
-doing 9 / 37
-1000/1000 [==============================] - 0s 286us/step
-batch accuracy: 0.642
-doing 10 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.667
-doing 11 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.685
-doing 12 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.709
-doing 13 / 37
-1000/1000 [==============================] - 0s 291us/step
-batch accuracy: 0.733
-doing 14 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.757
-doing 15 / 37
-1000/1000 [==============================] - 0s 276us/step
-batch accuracy: 0.786
-doing 16 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.802
-doing 17 / 37
-1000/1000 [==============================] - 0s 268us/step
-batch accuracy: 0.819
-doing 18 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.828
-doing 19 / 37
-1000/1000 [==============================] - 0s 257us/step
-batch accuracy: 0.83
-doing 20 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.847
-doing 21 / 37
-1000/1000 [==============================] - 0s 286us/step
-batch accuracy: 0.857
-doing 22 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.86
-doing 23 / 37
-1000/1000 [==============================] - 0s 277us/step
-batch accuracy: 0.869
-doing 24 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.876
-doing 25 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.889
-doing 26 / 37
-1000/1000 [==============================] - 0s 362us/step
-batch accuracy: 0.897
-doing 27 / 37
-1000/1000 [==============================] - 0s 270us/step
-batch accuracy: 0.903
-doing 28 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.911
-doing 29 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.903
-doing 30 / 37
-1000/1000 [==============================] - 0s 290us/step
-batch accuracy: 0.896
-doing 31 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.903
-doing 32 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.913
-doing 33 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.918
-doing 34 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.919
-doing 35 / 37
-1000/1000 [==============================] - 0s 278us/step
-batch accuracy: 0.924
-doing 36 / 37
-1000/1000 [==============================] - 0s 298us/step
-batch accuracy: 0.927
-Train accuracy 0.7192162162162162
-4200/4200 [==============================] - 1s 275us/step
-Test loss: 0.3723116356134415
-Test accuracy: 0.8942857142857142
+Train accuracy 0.9124304366438356
+4200/4200 [==============================] - 2s 554us/step
+Test loss: 0.16485723899943489
+Test accuracy: 0.9530952380952381
 ==================================================
 1 / 5
-doing 0 / 37
-1000/1000 [==============================] - 0s 285us/step
-batch accuracy: 0.905
-doing 1 / 37
-1000/1000 [==============================] - 0s 282us/step
-batch accuracy: 0.905
-doing 2 / 37
-1000/1000 [==============================] - 0s 307us/step
-batch accuracy: 0.912
-doing 3 / 37
-1000/1000 [==============================] - 0s 279us/step
-batch accuracy: 0.919
-doing 4 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.922
-doing 5 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.921
-doing 6 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.937
-doing 7 / 37
-1000/1000 [==============================] - 0s 260us/step
-batch accuracy: 0.932
-doing 8 / 37
-1000/1000 [==============================] - 0s 279us/step
-batch accuracy: 0.937
-doing 9 / 37
-1000/1000 [==============================] - 0s 272us/step
-batch accuracy: 0.941
-doing 10 / 37
-1000/1000 [==============================] - 0s 287us/step
-batch accuracy: 0.948
-doing 11 / 37
-1000/1000 [==============================] - 0s 303us/step
-batch accuracy: 0.954
-doing 12 / 37
-1000/1000 [==============================] - 0s 285us/step
-batch accuracy: 0.959
-doing 13 / 37
-1000/1000 [==============================] - 0s 271us/step
-batch accuracy: 0.961
-doing 14 / 37
-1000/1000 [==============================] - 0s 287us/step
-batch accuracy: 0.962
-doing 15 / 37
-1000/1000 [==============================] - 0s 273us/step
-batch accuracy: 0.968
-doing 16 / 37
-1000/1000 [==============================] - 0s 257us/step
-batch accuracy: 0.971
-doing 17 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.977
-doing 18 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.976
-doing 19 / 37
-1000/1000 [==============================] - 0s 258us/step
-batch accuracy: 0.97
-doing 20 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.972
-doing 21 / 37
-1000/1000 [==============================] - 0s 279us/step
-batch accuracy: 0.972
-doing 22 / 37
-1000/1000 [==============================] - 0s 300us/step
-batch accuracy: 0.972
-doing 23 / 37
-1000/1000 [==============================] - 0s 299us/step
-batch accuracy: 0.976
-doing 24 / 37
-1000/1000 [==============================] - 0s 275us/step
-batch accuracy: 0.977
-doing 25 / 37
-1000/1000 [==============================] - 0s 257us/step
-batch accuracy: 0.976
-doing 26 / 37
-1000/1000 [==============================] - 0s 255us/step
-batch accuracy: 0.977
-doing 27 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.979
-doing 28 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.978
-doing 29 / 37
-1000/1000 [==============================] - 0s 273us/step
-batch accuracy: 0.982
-doing 30 / 37
-1000/1000 [==============================] - 0s 295us/step
-batch accuracy: 0.979
-doing 31 / 37
-1000/1000 [==============================] - 0s 299us/step
-batch accuracy: 0.982
-doing 32 / 37
-1000/1000 [==============================] - 0s 298us/step
-batch accuracy: 0.979
-doing 33 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.979
-doing 34 / 37
-1000/1000 [==============================] - 0s 257us/step
-batch accuracy: 0.976
-doing 35 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.976
-doing 36 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.98
-Train accuracy 0.9591621621621621
-4200/4200 [==============================] - 1s 268us/step
-Test loss: 0.23688280346315532
-Test accuracy: 0.9276190476190476
+doing 0 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.9609375
+doing 1 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 0.96484375
+doing 2 / 73
+512/512 [==============================] - 0s 541us/step
+batch accuracy: 0.96484375
+doing 3 / 73
+512/512 [==============================] - 0s 556us/step
+batch accuracy: 0.966796875
+doing 4 / 73
+512/512 [==============================] - 0s 538us/step
+batch accuracy: 0.962890625
+doing 5 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 0.962890625
+doing 6 / 73
+512/512 [==============================] - 0s 614us/step
+batch accuracy: 0.970703125
+doing 7 / 73
+512/512 [==============================] - 0s 566us/step
+batch accuracy: 0.96875
+doing 8 / 73
+512/512 [==============================] - 0s 579us/step
+batch accuracy: 0.970703125
+doing 9 / 73
+512/512 [==============================] - 0s 553us/step
+batch accuracy: 0.98046875
+doing 10 / 73
+512/512 [==============================] - 0s 633us/step
+batch accuracy: 0.970703125
+doing 11 / 73
+512/512 [==============================] - 0s 540us/step
+batch accuracy: 0.970703125
+doing 12 / 73
+512/512 [==============================] - 0s 601us/step
+batch accuracy: 0.97265625
+doing 13 / 73
+512/512 [==============================] - 0s 566us/step
+batch accuracy: 0.97265625
+doing 14 / 73
+512/512 [==============================] - 0s 566us/step
+batch accuracy: 0.974609375
+doing 15 / 73
+512/512 [==============================] - 0s 584us/step
+batch accuracy: 0.984375
+doing 16 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 0.984375
+doing 17 / 73
+512/512 [==============================] - 0s 582us/step
+batch accuracy: 0.984375
+doing 18 / 73
+512/512 [==============================] - 0s 581us/step
+batch accuracy: 0.978515625
+doing 19 / 73
+512/512 [==============================] - 0s 612us/step
+batch accuracy: 0.9765625
+doing 20 / 73
+512/512 [==============================] - 0s 564us/step
+batch accuracy: 0.98046875
+doing 21 / 73
+512/512 [==============================] - 0s 536us/step
+batch accuracy: 0.98046875
+doing 22 / 73
+512/512 [==============================] - 0s 562us/step
+batch accuracy: 0.978515625
+doing 23 / 73
+512/512 [==============================] - 0s 570us/step
+batch accuracy: 0.98046875
+doing 24 / 73
+512/512 [==============================] - 0s 638us/step
+batch accuracy: 0.974609375
+doing 25 / 73
+512/512 [==============================] - 0s 585us/step
+batch accuracy: 0.9765625
+doing 26 / 73
+512/512 [==============================] - 0s 579us/step
+batch accuracy: 0.978515625
+doing 27 / 73
+512/512 [==============================] - 0s 624us/step
+batch accuracy: 0.98046875
+doing 28 / 73
+512/512 [==============================] - 0s 552us/step
+batch accuracy: 0.982421875
+doing 29 / 73
+512/512 [==============================] - 0s 743us/step
+batch accuracy: 0.990234375
+doing 30 / 73
+512/512 [==============================] - 0s 806us/step
+batch accuracy: 0.994140625
+doing 31 / 73
+512/512 [==============================] - 0s 589us/step
+batch accuracy: 0.990234375
+doing 32 / 73
+512/512 [==============================] - 0s 605us/step
+batch accuracy: 0.984375
+doing 33 / 73
+512/512 [==============================] - 0s 622us/step
+batch accuracy: 0.9921875
+doing 34 / 73
+512/512 [==============================] - 0s 624us/step
+batch accuracy: 0.986328125
+doing 35 / 73
+512/512 [==============================] - 0s 693us/step
+batch accuracy: 0.98828125
+doing 36 / 73
+512/512 [==============================] - 0s 585us/step
+batch accuracy: 0.984375
+doing 37 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 0.986328125
+doing 38 / 73
+512/512 [==============================] - 0s 559us/step
+batch accuracy: 0.98828125
+doing 39 / 73
+512/512 [==============================] - 0s 628us/step
+batch accuracy: 0.984375
+doing 40 / 73
+512/512 [==============================] - 0s 577us/step
+batch accuracy: 0.984375
+doing 41 / 73
+512/512 [==============================] - 0s 558us/step
+batch accuracy: 0.994140625
+doing 42 / 73
+512/512 [==============================] - 0s 641us/step
+batch accuracy: 0.99609375
+doing 43 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 0.99609375
+doing 44 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 0.9921875
+doing 45 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 0.990234375
+doing 46 / 73
+512/512 [==============================] - 0s 547us/step
+batch accuracy: 0.98828125
+doing 47 / 73
+512/512 [==============================] - 0s 549us/step
+batch accuracy: 0.994140625
+doing 48 / 73
+512/512 [==============================] - 0s 642us/step
+batch accuracy: 0.994140625
+doing 49 / 73
+512/512 [==============================] - 0s 597us/step
+batch accuracy: 0.986328125
+doing 50 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.984375
+doing 51 / 73
+512/512 [==============================] - 0s 704us/step
+batch accuracy: 0.98828125
+doing 52 / 73
+512/512 [==============================] - 0s 536us/step
+batch accuracy: 0.98828125
+doing 53 / 73
+512/512 [==============================] - 0s 580us/step
+batch accuracy: 0.984375
+doing 54 / 73
+512/512 [==============================] - 0s 542us/step
+batch accuracy: 0.98828125
+doing 55 / 73
+512/512 [==============================] - 0s 570us/step
+batch accuracy: 0.986328125
+doing 56 / 73
+512/512 [==============================] - 0s 622us/step
+batch accuracy: 0.986328125
+doing 57 / 73
+512/512 [==============================] - 0s 562us/step
+batch accuracy: 0.98828125
+doing 58 / 73
+512/512 [==============================] - 0s 606us/step
+batch accuracy: 0.98828125
+doing 59 / 73
+512/512 [==============================] - 0s 606us/step
+batch accuracy: 0.9921875
+doing 60 / 73
+512/512 [==============================] - 0s 680us/step
+batch accuracy: 0.99609375
+doing 61 / 73
+512/512 [==============================] - 0s 649us/step
+batch accuracy: 0.994140625
+doing 62 / 73
+512/512 [==============================] - 0s 645us/step
+batch accuracy: 0.9921875
+doing 63 / 73
+512/512 [==============================] - 0s 607us/step
+batch accuracy: 0.9921875
+doing 64 / 73
+512/512 [==============================] - 0s 614us/step
+batch accuracy: 0.9921875
+doing 65 / 73
+512/512 [==============================] - 0s 607us/step
+batch accuracy: 0.994140625
+doing 66 / 73
+512/512 [==============================] - 0s 543us/step
+batch accuracy: 0.99609375
+doing 67 / 73
+512/512 [==============================] - 0s 609us/step
+batch accuracy: 0.994140625
+doing 68 / 73
+512/512 [==============================] - 0s 594us/step
+batch accuracy: 0.9921875
+doing 69 / 73
+512/512 [==============================] - 0s 631us/step
+batch accuracy: 0.99609375
+doing 70 / 73
+512/512 [==============================] - 0s 658us/step
+batch accuracy: 1.0
+doing 71 / 73
+512/512 [==============================] - 0s 615us/step
+batch accuracy: 1.0
+doing 72 / 73
+512/512 [==============================] - 0s 568us/step
+batch accuracy: 0.998046875
+Train accuracy 0.984294734589041
+4200/4200 [==============================] - 3s 596us/step
+Test loss: 0.11887204998749352
+Test accuracy: 0.9676190476190476
 ==================================================
 2 / 5
-doing 0 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.97
-doing 1 / 37
-1000/1000 [==============================] - 0s 328us/step
-batch accuracy: 0.968
-doing 2 / 37
-1000/1000 [==============================] - 0s 312us/step
-batch accuracy: 0.973
-doing 3 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.974
-doing 4 / 37
-1000/1000 [==============================] - 0s 280us/step
-batch accuracy: 0.972
-doing 5 / 37
-1000/1000 [==============================] - 0s 291us/step
-batch accuracy: 0.975
-doing 6 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.98
-doing 7 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.985
-doing 8 / 37
-1000/1000 [==============================] - 0s 268us/step
-batch accuracy: 0.988
-doing 9 / 37
-1000/1000 [==============================] - 0s 277us/step
-batch accuracy: 0.99
-doing 10 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.99
-doing 11 / 37
-1000/1000 [==============================] - 0s 270us/step
-batch accuracy: 0.992
-doing 12 / 37
-1000/1000 [==============================] - 0s 270us/step
-batch accuracy: 0.998
-doing 13 / 37
-1000/1000 [==============================] - 0s 263us/step
-batch accuracy: 0.997
-doing 14 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.997
-doing 15 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.997
-doing 16 / 37
-1000/1000 [==============================] - 0s 273us/step
-batch accuracy: 0.998
-doing 17 / 37
-1000/1000 [==============================] - 0s 270us/step
-batch accuracy: 0.998
-doing 18 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.997
-doing 19 / 37
-1000/1000 [==============================] - 0s 268us/step
-batch accuracy: 0.997
-doing 20 / 37
-1000/1000 [==============================] - 0s 271us/step
-batch accuracy: 0.997
-doing 21 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.998
-doing 22 / 37
-1000/1000 [==============================] - 0s 259us/step
-batch accuracy: 0.999
-doing 23 / 37
-1000/1000 [==============================] - 0s 258us/step
-batch accuracy: 0.999
-doing 24 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.998
-doing 25 / 37
-1000/1000 [==============================] - 0s 349us/step
-batch accuracy: 0.997
-doing 26 / 37
-1000/1000 [==============================] - 0s 407us/step
-batch accuracy: 0.997
-doing 27 / 37
-1000/1000 [==============================] - 0s 277us/step
-batch accuracy: 0.997
-doing 28 / 37
-1000/1000 [==============================] - 0s 328us/step
-batch accuracy: 0.997
-doing 29 / 37
-1000/1000 [==============================] - 0s 425us/step
-batch accuracy: 0.997
-doing 30 / 37
-1000/1000 [==============================] - 0s 350us/step
-batch accuracy: 0.995
-doing 31 / 37
-1000/1000 [==============================] - 0s 299us/step
-batch accuracy: 0.995
-doing 32 / 37
-1000/1000 [==============================] - 0s 316us/step
-batch accuracy: 0.996
-doing 33 / 37
-1000/1000 [==============================] - 0s 335us/step
-batch accuracy: 0.992
-doing 34 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.992
-doing 35 / 37
-1000/1000 [==============================] - 0s 319us/step
-batch accuracy: 0.99
-doing 36 / 37
-1000/1000 [==============================] - 0s 294us/step
-batch accuracy: 0.989
-Train accuracy 0.9908378378378376
-4200/4200 [==============================] - 1s 290us/step
-Test loss: 0.21162862170487642
-Test accuracy: 0.939047619047619
+doing 0 / 73
+512/512 [==============================] - 0s 528us/step
+batch accuracy: 0.982421875
+doing 1 / 73
+512/512 [==============================] - 0s 676us/step
+batch accuracy: 0.98046875
+doing 2 / 73
+512/512 [==============================] - 0s 534us/step
+batch accuracy: 0.9765625
+doing 3 / 73
+512/512 [==============================] - 0s 540us/step
+batch accuracy: 0.98046875
+doing 4 / 73
+512/512 [==============================] - 0s 561us/step
+batch accuracy: 0.984375
+doing 5 / 73
+512/512 [==============================] - 0s 607us/step
+batch accuracy: 0.98828125
+doing 6 / 73
+512/512 [==============================] - 0s 609us/step
+batch accuracy: 0.98828125
+doing 7 / 73
+512/512 [==============================] - 0s 585us/step
+batch accuracy: 0.99609375
+doing 8 / 73
+512/512 [==============================] - 0s 596us/step
+batch accuracy: 0.9921875
+doing 9 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 0.9921875
+doing 10 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.9921875
+doing 11 / 73
+512/512 [==============================] - 0s 538us/step
+batch accuracy: 0.986328125
+doing 12 / 73
+512/512 [==============================] - 0s 606us/step
+batch accuracy: 0.9921875
+doing 13 / 73
+512/512 [==============================] - 0s 598us/step
+batch accuracy: 0.998046875
+doing 14 / 73
+512/512 [==============================] - 0s 578us/step
+batch accuracy: 1.0
+doing 15 / 73
+512/512 [==============================] - 0s 617us/step
+batch accuracy: 0.9921875
+doing 16 / 73
+512/512 [==============================] - 0s 564us/step
+batch accuracy: 0.9921875
+doing 17 / 73
+512/512 [==============================] - 0s 553us/step
+batch accuracy: 0.9921875
+doing 18 / 73
+512/512 [==============================] - 0s 657us/step
+batch accuracy: 0.990234375
+doing 19 / 73
+512/512 [==============================] - 0s 601us/step
+batch accuracy: 0.994140625
+doing 20 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 0.994140625
+doing 21 / 73
+512/512 [==============================] - 0s 647us/step
+batch accuracy: 0.9921875
+doing 22 / 73
+512/512 [==============================] - 0s 543us/step
+batch accuracy: 0.990234375
+doing 23 / 73
+512/512 [==============================] - 0s 576us/step
+batch accuracy: 0.99609375
+doing 24 / 73
+512/512 [==============================] - 0s 590us/step
+batch accuracy: 0.99609375
+doing 25 / 73
+512/512 [==============================] - 0s 588us/step
+batch accuracy: 0.994140625
+doing 26 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.994140625
+doing 27 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.99609375
+doing 28 / 73
+512/512 [==============================] - 0s 574us/step
+batch accuracy: 0.998046875
+doing 29 / 73
+512/512 [==============================] - 0s 563us/step
+batch accuracy: 0.99609375
+doing 30 / 73
+512/512 [==============================] - 0s 569us/step
+batch accuracy: 0.99609375
+doing 31 / 73
+512/512 [==============================] - 0s 593us/step
+batch accuracy: 1.0
+doing 32 / 73
+512/512 [==============================] - 0s 680us/step
+batch accuracy: 0.99609375
+doing 33 / 73
+512/512 [==============================] - 0s 545us/step
+batch accuracy: 0.99609375
+doing 34 / 73
+512/512 [==============================] - 0s 575us/step
+batch accuracy: 0.99609375
+doing 35 / 73
+512/512 [==============================] - 0s 696us/step
+batch accuracy: 0.99609375
+doing 36 / 73
+512/512 [==============================] - 0s 589us/step
+batch accuracy: 0.994140625
+doing 37 / 73
+512/512 [==============================] - 0s 597us/step
+batch accuracy: 0.99609375
+doing 38 / 73
+512/512 [==============================] - 0s 560us/step
+batch accuracy: 0.994140625
+doing 39 / 73
+512/512 [==============================] - 0s 610us/step
+batch accuracy: 0.99609375
+doing 40 / 73
+512/512 [==============================] - 0s 800us/step
+batch accuracy: 0.998046875
+doing 41 / 73
+512/512 [==============================] - 0s 529us/step
+batch accuracy: 0.998046875
+doing 42 / 73
+512/512 [==============================] - 0s 551us/step
+batch accuracy: 1.0
+doing 43 / 73
+512/512 [==============================] - 0s 590us/step
+batch accuracy: 0.998046875
+doing 44 / 73
+512/512 [==============================] - 0s 550us/step
+batch accuracy: 0.998046875
+doing 45 / 73
+512/512 [==============================] - 0s 588us/step
+batch accuracy: 0.99609375
+doing 46 / 73
+512/512 [==============================] - 0s 560us/step
+batch accuracy: 0.99609375
+doing 47 / 73
+512/512 [==============================] - 0s 649us/step
+batch accuracy: 1.0
+doing 48 / 73
+512/512 [==============================] - 0s 726us/step
+batch accuracy: 0.998046875
+doing 49 / 73
+512/512 [==============================] - 0s 652us/step
+batch accuracy: 0.998046875
+doing 50 / 73
+512/512 [==============================] - 0s 571us/step
+batch accuracy: 0.998046875
+doing 51 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 1.0
+doing 52 / 73
+512/512 [==============================] - 0s 559us/step
+batch accuracy: 0.998046875
+doing 53 / 73
+512/512 [==============================] - 0s 639us/step
+batch accuracy: 0.998046875
+doing 54 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 0.99609375
+doing 55 / 73
+512/512 [==============================] - 0s 583us/step
+batch accuracy: 0.99609375
+doing 56 / 73
+512/512 [==============================] - 0s 648us/step
+batch accuracy: 0.998046875
+doing 57 / 73
+512/512 [==============================] - 0s 601us/step
+batch accuracy: 1.0
+doing 58 / 73
+512/512 [==============================] - 0s 562us/step
+batch accuracy: 0.99609375
+doing 59 / 73
+512/512 [==============================] - 0s 556us/step
+batch accuracy: 0.99609375
+doing 60 / 73
+512/512 [==============================] - 0s 551us/step
+batch accuracy: 0.998046875
+doing 61 / 73
+512/512 [==============================] - 0s 555us/step
+batch accuracy: 1.0
+doing 62 / 73
+512/512 [==============================] - 0s 582us/step
+batch accuracy: 0.998046875
+doing 63 / 73
+512/512 [==============================] - 0s 623us/step
+batch accuracy: 0.99609375
+doing 64 / 73
+512/512 [==============================] - 0s 540us/step
+batch accuracy: 0.99609375
+doing 65 / 73
+512/512 [==============================] - 0s 633us/step
+batch accuracy: 1.0
+doing 66 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 0.998046875
+doing 67 / 73
+512/512 [==============================] - 0s 595us/step
+batch accuracy: 1.0
+doing 68 / 73
+512/512 [==============================] - 0s 685us/step
+batch accuracy: 1.0
+doing 69 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 1.0
+doing 70 / 73
+512/512 [==============================] - 0s 562us/step
+batch accuracy: 1.0
+doing 71 / 73
+512/512 [==============================] - 0s 602us/step
+batch accuracy: 1.0
+doing 72 / 73
+512/512 [==============================] - 0s 747us/step
+batch accuracy: 0.998046875
+Train accuracy 0.9950770547945206
+4200/4200 [==============================] - 3s 630us/step
+Test loss: 0.11261171695709761
+Test accuracy: 0.9742857142857143
 ==================================================
 3 / 5
-doing 0 / 37
-1000/1000 [==============================] - 0s 272us/step
-batch accuracy: 0.99
-doing 1 / 37
-1000/1000 [==============================] - 0s 271us/step
-batch accuracy: 0.986
-doing 2 / 37
-1000/1000 [==============================] - 0s 272us/step
-batch accuracy: 0.989
-doing 3 / 37
-1000/1000 [==============================] - 0s 262us/step
-batch accuracy: 0.993
-doing 4 / 37
-1000/1000 [==============================] - 0s 268us/step
-batch accuracy: 0.997
-doing 5 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.999
-doing 6 / 37
-1000/1000 [==============================] - 0s 269us/step
-batch accuracy: 0.999
-doing 7 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.999
-doing 8 / 37
-1000/1000 [==============================] - 0s 308us/step
-batch accuracy: 0.999
-doing 9 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.999
-doing 10 / 37
-1000/1000 [==============================] - 0s 279us/step
-batch accuracy: 0.999
-doing 11 / 37
-1000/1000 [==============================] - 0s 266us/step
-batch accuracy: 0.999
-doing 12 / 37
-1000/1000 [==============================] - 0s 296us/step
-batch accuracy: 0.999
-doing 13 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.999
-doing 14 / 37
-1000/1000 [==============================] - 0s 297us/step
-batch accuracy: 0.999
-doing 15 / 37
-1000/1000 [==============================] - 0s 290us/step
-batch accuracy: 0.999
-doing 16 / 37
-1000/1000 [==============================] - 0s 294us/step
+doing 0 / 73
+512/512 [==============================] - 0s 552us/step
+batch accuracy: 0.98828125
+doing 1 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 0.98828125
+doing 2 / 73
+512/512 [==============================] - 0s 606us/step
+batch accuracy: 0.98828125
+doing 3 / 73
+512/512 [==============================] - 0s 542us/step
+batch accuracy: 0.99609375
+doing 4 / 73
+512/512 [==============================] - 0s 597us/step
 batch accuracy: 1.0
-doing 17 / 37
-1000/1000 [==============================] - 0s 299us/step
+doing 5 / 73
+512/512 [==============================] - 0s 541us/step
+batch accuracy: 0.998046875
+doing 6 / 73
+512/512 [==============================] - 0s 561us/step
+batch accuracy: 0.998046875
+doing 7 / 73
+512/512 [==============================] - 0s 553us/step
+batch accuracy: 0.998046875
+doing 8 / 73
+512/512 [==============================] - 0s 743us/step
+batch accuracy: 0.998046875
+doing 9 / 73
+512/512 [==============================] - 0s 599us/step
+batch accuracy: 0.998046875
+doing 10 / 73
+512/512 [==============================] - 0s 538us/step
+batch accuracy: 0.99609375
+doing 11 / 73
+512/512 [==============================] - 0s 639us/step
 batch accuracy: 1.0
-doing 18 / 37
-1000/1000 [==============================] - 0s 305us/step
+doing 12 / 73
+512/512 [==============================] - 0s 658us/step
 batch accuracy: 1.0
-doing 19 / 37
-1000/1000 [==============================] - 0s 312us/step
+doing 13 / 73
+512/512 [==============================] - 0s 583us/step
+batch accuracy: 0.998046875
+doing 14 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 0.99609375
+doing 15 / 73
+512/512 [==============================] - 0s 598us/step
+batch accuracy: 0.998046875
+doing 16 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 0.998046875
+doing 17 / 73
+512/512 [==============================] - 0s 577us/step
+batch accuracy: 0.99609375
+doing 18 / 73
+512/512 [==============================] - 0s 605us/step
+batch accuracy: 0.998046875
+doing 19 / 73
+512/512 [==============================] - 0s 533us/step
+batch accuracy: 0.998046875
+doing 20 / 73
+512/512 [==============================] - 0s 609us/step
+batch accuracy: 0.998046875
+doing 21 / 73
+512/512 [==============================] - 0s 560us/step
 batch accuracy: 1.0
-doing 20 / 37
-1000/1000 [==============================] - 0s 265us/step
+doing 22 / 73
+512/512 [==============================] - 0s 561us/step
+batch accuracy: 0.994140625
+doing 23 / 73
+512/512 [==============================] - 0s 562us/step
+batch accuracy: 0.994140625
+doing 24 / 73
+512/512 [==============================] - 0s 549us/step
 batch accuracy: 1.0
-doing 21 / 37
-1000/1000 [==============================] - 0s 351us/step
+doing 25 / 73
+512/512 [==============================] - 0s 640us/step
+batch accuracy: 0.99609375
+doing 26 / 73
+512/512 [==============================] - 0s 644us/step
+batch accuracy: 0.99609375
+doing 27 / 73
+512/512 [==============================] - 0s 554us/step
+batch accuracy: 0.99609375
+doing 28 / 73
+512/512 [==============================] - 0s 668us/step
+batch accuracy: 0.998046875
+doing 29 / 73
+512/512 [==============================] - 0s 735us/step
 batch accuracy: 1.0
-doing 22 / 37
-1000/1000 [==============================] - 0s 288us/step
+doing 30 / 73
+512/512 [==============================] - 0s 539us/step
 batch accuracy: 1.0
-doing 23 / 37
-1000/1000 [==============================] - 0s 278us/step
+doing 31 / 73
+512/512 [==============================] - 0s 774us/step
 batch accuracy: 1.0
-doing 24 / 37
-1000/1000 [==============================] - 0s 346us/step
+doing 32 / 73
+512/512 [==============================] - 0s 543us/step
+batch accuracy: 0.9921875
+doing 33 / 73
+512/512 [==============================] - 0s 720us/step
+batch accuracy: 0.998046875
+doing 34 / 73
+512/512 [==============================] - 0s 681us/step
+batch accuracy: 0.99609375
+doing 35 / 73
+512/512 [==============================] - 0s 567us/step
+batch accuracy: 0.99609375
+doing 36 / 73
+512/512 [==============================] - 0s 767us/step
+batch accuracy: 0.99609375
+doing 37 / 73
+512/512 [==============================] - 0s 567us/step
+batch accuracy: 0.994140625
+doing 38 / 73
+512/512 [==============================] - 0s 543us/step
 batch accuracy: 1.0
-doing 25 / 37
-1000/1000 [==============================] - 0s 338us/step
+doing 39 / 73
+512/512 [==============================] - 0s 626us/step
+batch accuracy: 0.998046875
+doing 40 / 73
+512/512 [==============================] - 0s 563us/step
 batch accuracy: 1.0
-doing 26 / 37
-1000/1000 [==============================] - 0s 351us/step
+doing 41 / 73
+512/512 [==============================] - 0s 626us/step
 batch accuracy: 1.0
-doing 27 / 37
-1000/1000 [==============================] - 0s 270us/step
+doing 42 / 73
+512/512 [==============================] - 0s 570us/step
 batch accuracy: 1.0
-doing 28 / 37
-1000/1000 [==============================] - 0s 265us/step
+doing 43 / 73
+512/512 [==============================] - 0s 590us/step
 batch accuracy: 1.0
-doing 29 / 37
-1000/1000 [==============================] - 0s 346us/step
+doing 44 / 73
+512/512 [==============================] - 0s 586us/step
 batch accuracy: 1.0
-doing 30 / 37
-1000/1000 [==============================] - 0s 328us/step
-batch accuracy: 0.998
-doing 31 / 37
-1000/1000 [==============================] - 0s 357us/step
-batch accuracy: 0.999
-doing 32 / 37
-1000/1000 [==============================] - 0s 273us/step
-batch accuracy: 0.999
-doing 33 / 37
-1000/1000 [==============================] - 0s 270us/step
-batch accuracy: 0.996
-doing 34 / 37
-1000/1000 [==============================] - 0s 275us/step
-batch accuracy: 0.995
-doing 35 / 37
-1000/1000 [==============================] - 0s 267us/step
-batch accuracy: 0.995
-doing 36 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.994
-Train accuracy 0.9978378378378379
-4200/4200 [==============================] - 1s 262us/step
-Test loss: 0.21339615402255385
-Test accuracy: 0.9414285714285714
+doing 45 / 73
+512/512 [==============================] - 0s 550us/step
+batch accuracy: 0.99609375
+doing 46 / 73
+512/512 [==============================] - 0s 539us/step
+batch accuracy: 1.0
+doing 47 / 73
+512/512 [==============================] - 0s 702us/step
+batch accuracy: 1.0
+doing 48 / 73
+512/512 [==============================] - 0s 618us/step
+batch accuracy: 1.0
+doing 49 / 73
+512/512 [==============================] - 0s 632us/step
+batch accuracy: 0.998046875
+doing 50 / 73
+512/512 [==============================] - 0s 611us/step
+batch accuracy: 1.0
+doing 51 / 73
+512/512 [==============================] - 0s 546us/step
+batch accuracy: 0.998046875
+doing 52 / 73
+512/512 [==============================] - 0s 859us/step
+batch accuracy: 1.0
+doing 53 / 73
+512/512 [==============================] - 0s 877us/step
+batch accuracy: 0.998046875
+doing 54 / 73
+512/512 [==============================] - 1s 1ms/step
+batch accuracy: 1.0
+doing 55 / 73
+512/512 [==============================] - 0s 551us/step
+batch accuracy: 0.998046875
+doing 56 / 73
+512/512 [==============================] - 0s 634us/step
+batch accuracy: 0.99609375
+doing 57 / 73
+512/512 [==============================] - 0s 583us/step
+batch accuracy: 1.0
+doing 58 / 73
+512/512 [==============================] - 0s 629us/step
+batch accuracy: 1.0
+doing 59 / 73
+512/512 [==============================] - 0s 601us/step
+batch accuracy: 1.0
+doing 60 / 73
+512/512 [==============================] - 0s 561us/step
+batch accuracy: 1.0
+doing 61 / 73
+512/512 [==============================] - 0s 537us/step
+batch accuracy: 1.0
+doing 62 / 73
+512/512 [==============================] - 0s 553us/step
+batch accuracy: 0.99609375
+doing 63 / 73
+512/512 [==============================] - 0s 563us/step
+batch accuracy: 1.0
+doing 64 / 73
+512/512 [==============================] - 0s 661us/step
+batch accuracy: 1.0
+doing 65 / 73
+512/512 [==============================] - 0s 564us/step
+batch accuracy: 1.0
+doing 66 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 1.0
+doing 67 / 73
+512/512 [==============================] - 0s 637us/step
+batch accuracy: 1.0
+doing 68 / 73
+512/512 [==============================] - 0s 579us/step
+batch accuracy: 1.0
+doing 69 / 73
+512/512 [==============================] - 0s 573us/step
+batch accuracy: 1.0
+doing 70 / 73
+512/512 [==============================] - 0s 557us/step
+batch accuracy: 1.0
+doing 71 / 73
+512/512 [==============================] - 0s 545us/step
+batch accuracy: 1.0
+doing 72 / 73
+512/512 [==============================] - 0s 551us/step
+batch accuracy: 0.998046875
+Train accuracy 0.997966609589041
+4200/4200 [==============================] - 2s 588us/step
+Test loss: 0.11035395232710428
+Test accuracy: 0.9723809523809523
 ==================================================
 4 / 5
-doing 0 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.994
-doing 1 / 37
-1000/1000 [==============================] - 0s 273us/step
-batch accuracy: 0.996
-doing 2 / 37
-1000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.998
-doing 3 / 37
-1000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.999
-doing 4 / 37
-1000/1000 [==============================] - 0s 299us/step
+doing 0 / 73
+512/512 [==============================] - 0s 534us/step
+batch accuracy: 0.9921875
+doing 1 / 73
+512/512 [==============================] - 0s 534us/step
+batch accuracy: 0.994140625
+doing 2 / 73
+512/512 [==============================] - 0s 596us/step
+batch accuracy: 0.99609375
+doing 3 / 73
+512/512 [==============================] - 0s 547us/step
 batch accuracy: 1.0
-doing 5 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 281us/step
+doing 4 / 73
+512/512 [==============================] - 0s 529us/step
 batch accuracy: 1.0
-doing 6 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 288us/step
+doing 5 / 73
+512/512 [==============================] - 0s 538us/step
 batch accuracy: 1.0
-doing 7 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 01000/1000 [==============================] - 0s 273us/step
+doing 6 / 73
+512/512 [==============================] - 0s 538us/step
+batch accuracy: 0.998046875
+doing 7 / 73
+512/512 [==============================] - 0s 539us/step
 batch accuracy: 1.0
-doing 8 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 272us/step
+doing 8 / 73
+512/512 [==============================] - 0s 574us/step
 batch accuracy: 1.0
-doing 9 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 832/1000 [=======================>......] - ETA: 01000/1000 [==============================] - 0s 265us/step
+doing 9 / 73
+512/512 [==============================] - 0s 540us/step
+batch accuracy: 0.998046875
+doing 10 / 73
+512/512 [==============================] - 0s 575us/step
+batch accuracy: 0.994140625
+doing 11 / 73
+512/512 [==============================] - 0s 580us/step
+batch accuracy: 0.998046875
+doing 12 / 73
+512/512 [==============================] - 0s 719us/step
 batch accuracy: 1.0
-doing 10 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 01000/1000 [==============================] - 0s 266us/step
+doing 13 / 73
+512/512 [==============================] - 0s 872us/step
 batch accuracy: 1.0
-doing 11 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 284us/step
+doing 14 / 73
+512/512 [==============================] - 0s 669us/step
 batch accuracy: 1.0
-doing 12 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 896/1000 [=========================>....] - ETA: 01000/1000 [==============================] - 0s 263us/step
+doing 15 / 73
+512/512 [==============================] - 0s 605us/step
 batch accuracy: 1.0
-doing 13 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 480/1000 [=============>................] - ETA: 0 704/1000 [====================>.........] - ETA: 0 896/1000 [=========================>....] - ETA: 01000/1000 [==============================] - 0s 264us/step
-batch accuracy: 0.999
-doing 14 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 286us/step
+doing 16 / 73
+512/512 [==============================] - 0s 544us/step
 batch accuracy: 1.0
-doing 15 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 896/1000 [=========================>....] - ETA: 01000/1000 [==============================] - 0s 263us/step
+doing 17 / 73
+512/512 [==============================] - 0s 597us/step
+batch accuracy: 0.998046875
+doing 18 / 73
+512/512 [==============================] - 0s 565us/step
+batch accuracy: 0.998046875
+doing 19 / 73
+512/512 [==============================] - 0s 596us/step
+batch accuracy: 0.998046875
+doing 20 / 73
+512/512 [==============================] - 0s 622us/step
+batch accuracy: 0.998046875
+doing 21 / 73
+512/512 [==============================] - 0s 560us/step
 batch accuracy: 1.0
-doing 16 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 290us/step
+doing 22 / 73
+512/512 [==============================] - 0s 568us/step
 batch accuracy: 1.0
-doing 17 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 268us/step
+doing 23 / 73
+512/512 [==============================] - 0s 601us/step
+batch accuracy: 0.99609375
+doing 24 / 73
+512/512 [==============================] - 0s 566us/step
+batch accuracy: 0.998046875
+doing 25 / 73
+512/512 [==============================] - 0s 548us/step
 batch accuracy: 1.0
-doing 18 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 269us/step
+doing 26 / 73
+512/512 [==============================] - 0s 539us/step
+batch accuracy: 0.99609375
+doing 27 / 73
+512/512 [==============================] - 0s 558us/step
+batch accuracy: 0.998046875
+doing 28 / 73
+512/512 [==============================] - 0s 588us/step
+batch accuracy: 0.998046875
+doing 29 / 73
+512/512 [==============================] - 0s 561us/step
+batch accuracy: 0.998046875
+doing 30 / 73
+512/512 [==============================] - 0s 646us/step
+batch accuracy: 0.998046875
+doing 31 / 73
+512/512 [==============================] - 0s 645us/step
 batch accuracy: 1.0
-doing 19 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 480/1000 [=============>................] - ETA: 0 704/1000 [====================>.........] - ETA: 0 928/1000 [==========================>...] - ETA: 01000/1000 [==============================] - 0s 262us/step
+doing 32 / 73
+512/512 [==============================] - 0s 808us/step
+batch accuracy: 0.998046875
+doing 33 / 73
+512/512 [==============================] - 0s 545us/step
+batch accuracy: 0.998046875
+doing 34 / 73
+512/512 [==============================] - 0s 572us/step
+batch accuracy: 0.99609375
+doing 35 / 73
+512/512 [==============================] - 0s 553us/step
 batch accuracy: 1.0
-doing 20 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 864/1000 [========================>.....] - ETA: 01000/1000 [==============================] - 0s 280us/step
+doing 36 / 73
+512/512 [==============================] - 0s 639us/step
 batch accuracy: 1.0
-doing 21 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 832/1000 [=======================>......] - ETA: 01000/1000 [==============================] - 0s 266us/step
+doing 37 / 73
+512/512 [==============================] - 0s 690us/step
 batch accuracy: 1.0
-doing 22 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 480/1000 [=============>................] - ETA: 0 704/1000 [====================>.........] - ETA: 0 928/1000 [==========================>...] - ETA: 01000/1000 [==============================] - 0s 256us/step
+doing 38 / 73
+512/512 [==============================] - 0s 600us/step
 batch accuracy: 1.0
-doing 23 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 480/1000 [=============>................] - ETA: 0 704/1000 [====================>.........] - ETA: 0 928/1000 [==========================>...] - ETA: 01000/1000 [==============================] - 0s 261us/step
+doing 39 / 73
+512/512 [==============================] - 0s 579us/step
 batch accuracy: 1.0
-doing 24 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 864/1000 [========================>.....] - ETA: 01000/1000 [==============================] - 0s 264us/step
+doing 40 / 73
+512/512 [==============================] - 0s 660us/step
 batch accuracy: 1.0
-doing 25 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 480/1000 [=============>................] - ETA: 0 704/1000 [====================>.........] - ETA: 0 928/1000 [==========================>...] - ETA: 01000/1000 [==============================] - 0s 256us/step
+doing 41 / 73
+512/512 [==============================] - 0s 572us/step
 batch accuracy: 1.0
-doing 26 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 960/1000 [===========================>..] - ETA: 01000/1000 [==============================] - 0s 293us/step
+doing 42 / 73
+512/512 [==============================] - 0s 570us/step
 batch accuracy: 1.0
-doing 27 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 864/1000 [========================>.....] - ETA: 01000/1000 [==============================] - 0s 263us/step
+doing 43 / 73
+512/512 [==============================] - 0s 808us/step
 batch accuracy: 1.0
-doing 28 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 864/1000 [========================>.....] - ETA: 01000/1000 [==============================] - 0s 263us/step
+doing 44 / 73
+512/512 [==============================] - 0s 699us/step
 batch accuracy: 1.0
-doing 29 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 672/1000 [===================>..........] - ETA: 0 896/1000 [=========================>....] - ETA: 01000/1000 [==============================] - 0s 262us/step
+doing 45 / 73
+512/512 [==============================] - 0s 897us/step
+batch accuracy: 0.998046875
+doing 46 / 73
+512/512 [==============================] - 0s 746us/step
+batch accuracy: 0.998046875
+doing 47 / 73
+512/512 [==============================] - 0s 851us/step
 batch accuracy: 1.0
-doing 30 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 384/1000 [==========>...................] - ETA: 0 576/1000 [================>.............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 281us/step
+doing 48 / 73
+512/512 [==============================] - 0s 603us/step
 batch accuracy: 1.0
-doing 31 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 281us/step
+doing 49 / 73
+512/512 [==============================] - 0s 553us/step
 batch accuracy: 1.0
-doing 32 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 384/1000 [==========>...................] - ETA: 0 544/1000 [===============>..............] - ETA: 0 736/1000 [=====================>........] - ETA: 0 928/1000 [==========================>...] - ETA: 01000/1000 [==============================] - 0s 305us/step
+doing 50 / 73
+512/512 [==============================] - 0s 588us/step
 batch accuracy: 1.0
-doing 33 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 608/1000 [=================>............] - ETA: 0 800/1000 [=======================>......] - ETA: 0 992/1000 [============================>.] - ETA: 01000/1000 [==============================] - 0s 285us/step
-batch accuracy: 0.997
-doing 34 / 37
-  32/1000 [..............................] - ETA: 0 256/1000 [======>.......................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 832/1000 [=======================>......] - ETA: 01000/1000 [==============================] - 0s 284us/step
-batch accuracy: 0.998
-doing 35 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 416/1000 [===========>..................] - ETA: 0 576/1000 [================>.............] - ETA: 0 768/1000 [======================>.......] - ETA: 0 960/1000 [===========================>..] - ETA: 01000/1000 [==============================] - 0s 298us/step
-batch accuracy: 0.999
-doing 36 / 37
-  32/1000 [..............................] - ETA: 0 224/1000 [=====>........................] - ETA: 0 448/1000 [============>.................] - ETA: 0 640/1000 [==================>...........] - ETA: 0 864/1000 [========================>.....] - ETA: 01000/1000 [==============================] - 0s 265us/step
-batch accuracy: 0.997
-Train accuracy 0.9993783783783785
-  32/4200 [..............................] - ETA: 1 224/4200 [>.............................] - ETA: 1 448/4200 [==>...........................] - ETA: 0 672/4200 [===>..........................] - ETA: 0 864/4200 [=====>........................] - ETA: 01056/4200 [======>.......................] - ETA: 01248/4200 [=======>......................] - ETA: 01440/4200 [=========>....................] - ETA: 01632/4200 [==========>...................] - ETA: 01824/4200 [============>.................] - ETA: 01984/4200 [=============>................] - ETA: 02176/4200 [==============>...............] - ETA: 02336/4200 [===============>..............] - ETA: 02496/4200 [================>.............] - ETA: 02688/4200 [==================>...........] - ETA: 02880/4200 [===================>..........] - ETA: 03072/4200 [====================>.........] - ETA: 03296/4200 [======================>.......] - ETA: 03520/4200 [========================>.....] - ETA: 03712/4200 [=========================>....] - ETA: 03904/4200 [==========================>...] - ETA: 04096/4200 [============================>.] - ETA: 04200/4200 [==============================] - 1s 279us/step
-Test loss: 0.21080376681339527
-Test accuracy: 0.9454761904761905
+doing 51 / 73
+512/512 [==============================] - 0s 550us/step
+batch accuracy: 1.0
+doing 52 / 73
+512/512 [==============================] - 0s 586us/step
+batch accuracy: 1.0
+doing 53 / 73
+512/512 [==============================] - 0s 542us/step
+batch accuracy: 0.998046875
+doing 54 / 73
+512/512 [==============================] - 0s 577us/step
+batch accuracy: 1.0
+doing 55 / 73
+512/512 [==============================] - 0s 548us/step
+batch accuracy: 0.998046875
+doing 56 / 73
+512/512 [==============================] - 0s 571us/step
+batch accuracy: 1.0
+doing 57 / 73
+512/512 [==============================] - 0s 548us/step
+batch accuracy: 1.0
+doing 58 / 73
+512/512 [==============================] - 0s 574us/step
+batch accuracy: 1.0
+doing 59 / 73
+512/512 [==============================] - 0s 549us/step
+batch accuracy: 1.0
+doing 60 / 73
+512/512 [==============================] - 0s 571us/step
+batch accuracy: 1.0
+doing 61 / 73
+512/512 [==============================] - 0s 555us/step
+batch accuracy: 1.0
+doing 62 / 73
+512/512 [==============================] - 0s 567us/step
+batch accuracy: 1.0
+doing 63 / 73
+512/512 [==============================] - 0s 547us/step
+batch accuracy: 1.0
+doing 64 / 73
+512/512 [==============================] - 0s 545us/step
+batch accuracy: 1.0
+doing 65 / 73
+512/512 [==============================] - 0s 550us/step
+batch accuracy: 1.0
+doing 66 / 73
+512/512 [==============================] - 0s 567us/step
+batch accuracy: 1.0
+doing 67 / 73
+512/512 [==============================] - 0s 554us/step
+batch accuracy: 1.0
+doing 68 / 73
+512/512 [==============================] - 0s 552us/step
+batch accuracy: 1.0
+doing 69 / 73
+512/512 [==============================] - 0s 548us/step
+batch accuracy: 1.0
+doing 70 / 73
+512/512 [==============================] - 0s 544us/step
+batch accuracy: 1.0
+doing 71 / 73
+512/512 [==============================] - 0s 541us/step
+batch accuracy: 1.0
+doing 72 / 73
+512/512 [==============================] - 0s 542us/step
+batch accuracy: 0.998046875
+Train accuracy 0.9990100599315068
+4200/4200 [==============================] - 2s 556us/step
+Test loss: 0.1043071129803069
+Test accuracy: 0.9769047619047619
 """
