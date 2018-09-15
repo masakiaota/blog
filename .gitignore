@@ -106,3 +106,5 @@ creditcard.csv
 
 data/
 .vscode/
+*.h5
+vae/vae_cnn
