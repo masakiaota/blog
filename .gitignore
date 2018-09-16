@@ -108,3 +108,4 @@ data/
 .vscode/
 *.h5
 vae/vae_cnn
+events.out.tfevents*
