@@ -187,6 +187,7 @@ Epoch 35/100
 ### まとめ
 - 時系列データに対応したVAEを作った
 - MNISTの再構成、及び生成を行った
+- Zの分布を可視化した
 - コードはGithubに
     - https://github.com/masakiaota/blog/blob/master/vae/article/seq_vae.md
 
