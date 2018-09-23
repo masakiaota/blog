@@ -189,7 +189,7 @@ Epoch 35/100
 - MNISTの再構成、及び生成を行った
 - Zの分布を可視化した
 - コードはGithubに
-    - https://github.com/masakiaota/blog/blob/master/vae/article/seq_vae.md
+    - https://github.com/masakiaota/blog/blob/master/vae/seq_vae_MNIST.ipynb
 
 ### 参考文献
 
