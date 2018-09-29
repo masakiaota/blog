@@ -116,7 +116,7 @@ $UPDATE_COMPLETIONS_ON_KEYPRESS = True
 ```
 # プロンプトの表記
 $PROMPT = "\n{INTENSE_GREEN}[ {cwd} ] \n{env_name:{} }{user}{WHITE}@{INTENSE_BLUE    }{hostname}{WHITE}{branch_color}{curr_branch: {}}\n{NO_COLOR}{BOLD_BLUE}{prompt_e    nd}{NO_COLOR} "
- ```
+```
 
 pythonさえあればこのシェルが導入できるので便利である。
 
