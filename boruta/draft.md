@@ -124,6 +124,7 @@ borutaでは以上の手順を各特徴量に対して、一つずつ検定を�
 （図）
 
 逆に対立仮説2を受容してしまった特徴量は、計算から省くことでborutaは繰り返し計算をどんどん軽くしている。
+また有意水準αは固定ではなく、borutaではBonferroni correctionという手法で決定している。python実装にはBonferroni correctionの代わりに、Benjamini Hochberg FDRを用いることができるが、経験上前者のほうがよい結果を出す。
 
 ### 実験
 (notebookにて)
