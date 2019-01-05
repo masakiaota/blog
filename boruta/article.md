@@ -2,7 +2,7 @@
 
 ### 特徴量選択とは
 特徴量選択(Feature Selection, 変数選択とも)はデータサイエンスにおいて非常に重要である。
-Kaggle等のコンペティションではひたすら判別の精度を重要視するが、実務上どうしてそのような判別をしたのかという理由のほうが大事である。(回帰問題も同様)
+Kaggle等のコンペティションではひたすら判別の精度を重要視するが、実務上どうしてそのような判別をしたのかという理由のほうが大事である(回帰問題も同様)。
 例えば、なにかの製造工程をイメージしてみよう。
 当然欠陥品は生じるだろうが、この欠陥品を見分けるシステムよりも欠陥品を減らせる改良のほうが良いだろう(もちろん見分けるのも大事だが)。
 そこで、判別においてどのような特徴量が重要だったか選ぶことができれば、改良への糸口が見えてくるだろう。
@@ -16,10 +16,11 @@ Witold R. Rudnicki, Miron B. Kursaらが考案。
 R実装
 https://cran.r-project.org/web/packages/Boruta/index.html
 
-Python実装(バグあり。まとめで補足します。)
+Python実装(バグあり。まとめ後に補足します。)
 https://github.com/scikit-learn-contrib/boruta_py
 
 (名前の由来はスラヴ神話の森の神の名前らしいです。こんな見た目してます。)
+
 ![](./figs/Boruta_san.png)
 
 このBorutaという手法は経験上非常に強力で、判別や回帰の性能が著しく低下したことはない。低下しても誤差の範囲内。むしろ性能が良くなることが多い。
@@ -33,16 +34,16 @@ https://github.com/scikit-learn-contrib/boruta_py
     - 選んだ特徴量が過学習する
 - lasso
     - 選んだ特徴量が過学習する
-    - ロジスティクス回帰やSVMで用いたことしかないのでよくわからない
+    - ロジスティクス回帰やSVMで用いたことしかないので、めっちゃ効く手法もあるかも
 
 ### とりあえず使ってみる
-理論を説明する前にまず、使ってBorutaの威力を実感していただこう。
+理論を説明する前に、まず実際に使ってBorutaの威力を実感していただこう。
 Pythonで実装する。
-用いるデータセットはMadelon datasetという人口データ。
+用いるデータセットはMadelon datasetという人工データ。
 
 - Madelon Dataset
-  - 判別問題のデータセットで(-1, 1というクラスラベルがついている)
-  - サンプル数は2000
+  - 判別問題(-1, 1のクラスラベルがついている)
+  - サンプル数は2000
   - 特徴量は500個
   - 特徴量のうち20個は本当に判別に寄与する特徴量で、残りはデタラメ
   - サンプルのうち1500サンプルをtrainに500サンプルをtestに
@@ -60,7 +61,7 @@ Pythonで実装する。
 
 #### ベースラインの判別
 ベースラインを実行すると以下のような判別を結果が得られる
-`d`` Python
+``` Python
 rf=RandomForestClassifier(
     n_estimators=500,
     random_state=42,
@@ -238,8 +239,9 @@ Shadow featuresの中で最大の重要度よりも大きな特徴量につい�
 - Borutaは特徴量選択を行う手法の一つで非常に強力。
 - 人口データ実験では特徴量を選択した結果、誤判別が166->59まで減った。
 - Borutaのアイデアは「ニセの特徴量を作って重要度を比較する」というシンプルなもの。
-- 検定を行い真に重要かを決めるために性能が良い。
+- 真に重要かを検定するために性能が良い。
 
+![](figs/Boruta_idea.png)
 
 ### 補足
 https://github.com/scikit-learn-contrib/boruta_py
@@ -249,9 +251,11 @@ BorutaのPython実装にはまだバグがあり動かないこともありま�
 
 ひとまず、issueをあさり、動くようにしたものをここにおいて置くので、使う際は同一ディレクトリに入れて`from boruta_py import BorutaPy`してください。
 
+https://raw.githubusercontent.com/masakiaota/blog/master/boruta/boruta_py.py
+
 また分析に用いたnotebookへのリンクはこちらです。
 
-
+https://github.com/masakiaota/blog/blob/master/boruta/Madalon_Data_Set.ipynb
 
 
 ### 参考
