@@ -47,7 +47,7 @@
 https://aotamasaki.hatenablog.com/entry/2018/04/18/201127
 
 これはかなり初心者向けの内容になってしまったが今回は、もっと踏み込んだ内容にしようと思う。
-具体的には、特徴量選択の手法の全体像を紹介してから、需要が大きいとされる教師ありの特徴量選択について手法を紹介する。
+具体的には、特徴量選択の手法の全体像を紹介してから、需要が大きいとされる教師ありの特徴量選択について代表的な手法をいくつか紹介する。
 また、最後に最新の特徴量選択の動向も紹介する。
 
 今回紹介する半分以上の内容は、こちらのサーベイ論文にあるので興味がある方はどうぞ。
@@ -99,14 +99,51 @@ https://www.researchgate.net/publication/323661651_Feature_selection_in_machine_
 
 
 ### 教師ありの特徴量選択
+ここでは教師ありの分類問題を仮定する。
 
 #### filter method
+- filter methodとは
+
+##### 関係性を上げて冗長性を下げる
+
+JMI https://github.com/jundongl/scikit-feature/blob/master/skfeature/example/test_JMI.py
+
+mRMR
+https://github.com/fbrundu/pymrmr
+
+
+##### 関係性を上げて多様性を上げる
+- しかし実装があまりなく、私が調べた限りでは見つからなかった。ご存知の方がいたら教えていただきたい。
+
+
 
 #### wrapper method
 featureのsearch sterategyが重要
 
 
+
+ベースライン SVM-RFE
+scikit-learnで実装できるので略
+
+以前、borutaというのを紹介した。
+これは判別性能は見ていないが、複数回モデルを構築して特徴量を選ぶという意味でwrapper method
+
+
+xgboostを用いたborutaの親戚
+https://github.com/chasedehan/BoostARoota
+
+ただ、これらは冗長なものも取り込んでしまうことに注意。
+
+
 #### embedding method
+- モデルを学習すると同時に、使う特徴量も自動的に決定してしまおうという枠組みである。
+- 一番ナイーブな方法はRidge(L1正則化)をモデルに組み込むこと。(but基本的に線形モデルになってしまう
+- 非線形なモデルに対応したものとして、regularized treeを採用したランダムフォレスト(RRF)が挙げられる。(これのアイデアはシンプルで木を成長させるときに余分な特徴量を取り込まないようにするというアイデアである)
+- https://cran.r-project.org/web/packages/RRF/RRF.pdf
+- https://github.com/softwaredeng/RRF
+
+
+
 
 ### 特徴量選択の新展開
 
