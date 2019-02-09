@@ -103,13 +103,20 @@ https://www.researchgate.net/publication/323661651_Feature_selection_in_machine_
 
 #### filter method
 - filter methodとは
+- 一般的に後述するwrapper methodよりは性能は劣る。
 
+##### 単変量とクラスラベルの関連性を見る
+- sklearn https://scikit-learn.org/stable/modules/feature_selection.html#univariate-feature-selection
 ##### 関係性を上げて冗長性を下げる
-
-JMI https://github.com/jundongl/scikit-feature/blob/master/skfeature/example/test_JMI.py
 
 mRMR
 https://github.com/fbrundu/pymrmr
+
+JMI https://github.com/jundongl/scikit-feature/blob/master/skfeature/example/test_JMI.py
+
+https://thuijskens.github.io/2017/10/07/feature-selection/
+
+
 
 
 ##### 関係性を上げて多様性を上げる
@@ -146,10 +153,18 @@ https://github.com/chasedehan/BoostARoota
 
 
 ### 特徴量選択の新展開
+- さらなる研究が求められている特徴量選択の分野について紹介する。
+- とはいってもこの論文の内容なのだが。
 
-#### 超高次元データの特徴量選択
+
+各章それぞれ何書く？
+- 問題の紹介だけでいいか
+
+- 
 
 #### インバランスデータの特徴量選択
+
+#### 超高次元データの特徴量選択
 
 #### 特徴量選択のアンサンブル
 
