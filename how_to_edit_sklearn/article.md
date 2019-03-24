@@ -1,4 +1,4 @@
-【具体例つき】scikit-learnを改変しよう ~改変版のinstall方法と改変に必要な知識のリンク集~
+【具体例つき】scikit-learnを改変しよう \~改変版のinstall方法と改変に必要な知識のリンク集\~
 ===
 
 ![](fig/eye_catch.png)
