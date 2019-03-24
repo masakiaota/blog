@@ -328,6 +328,14 @@ scikit-learnに改変を加えて使うため、必要な導入手順や知識�
 
 [TOC]
 
+### ソースコード等
+実験に用いたノートブック 出力が若干違いますが気にしないでください。
+https://github.com/masakiaota/blog/blob/master/how_to_edit_sklearn/feature_imp_vis.ipynb
+
+改変したtree.py
+
+[この部分](https://github.com/masakiaota/blog/blob/7da1cffe19bdbed8ebc0b18dddd1eeda8d714377/how_to_edit_sklearn/tree.py#L909)にメソッドを追加したので、自分の環境のtree.pyにはりつければ使えるようになります。
+
 
 
 
