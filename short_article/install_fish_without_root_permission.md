@@ -1,12 +1,18 @@
-管理者権限なしでfishを導入したい
+管理者権限なしでfishを導入したい(ほかも導入可能)
 ===
-
 ### fishのススメ
 fishの良い点を完結に
 
 ### fishの欠点
+もともと入っていないことがおおい。
 
-以下管理者権限がないのを前提として話を進める。
+### 2つの方法
+- fishをコンパイル
+- homebrew(旧linuxbrew)を$HOMEにインストール
+
+後者をやる
+
+### homebrewのpathを通す(fish.config)
 
 ### install
 gist貼る
@@ -14,3 +20,6 @@ gist貼る
 ### bashから起動するようにする
 
 ### fish.config晒す
+
+
+
