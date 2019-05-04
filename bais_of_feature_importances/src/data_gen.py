@@ -25,6 +25,7 @@ def data_pattern1(random_state=2019):
     binom=stats.binom
     target=binom.rvs(n=1,p=0.5,size=(200,))
 
+    
 
     return data, target
 
@@ -112,7 +113,7 @@ def data_pattern2(random_state=2019):
 
     return data, target
 
-def data_pattern1(random_state=2019):
+def data_pattern3(random_state=2019):
     '''
     get artificial dataset
 
