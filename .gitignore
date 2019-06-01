@@ -109,3 +109,4 @@ data/
 *.h5
 vae/vae_cnn
 events.out.tfevents*
+report_private.md
