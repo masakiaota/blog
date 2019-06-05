@@ -14,7 +14,6 @@ def data_pattern1(random_state=2019):
     
     5次元、200サンプル
     
-    
     '''
 
     np.random.seed(seed=random_state)
@@ -137,16 +136,118 @@ def data_pattern3(random_state=2019):
     columns.append(norm.rvs(loc=0, scale=1,size=(200,)))
 
     # 指数分布
-    
+    expo=stats.expon
+    columns.append(expo.rvs(size=(200,)))
+
     # カイ二乗分布
+    columns.append(stats.chi2.rvs(1,size=(200,)))
+
     # コーシー分布
-    # 極値分布
+    columns.append(stats.cauchy.rvs(size=(200,)))
     
+    #ndarrayに変換
+    data=np.array(columns).T
     
     
     # targetの生成
     binom=stats.binom
     target=binom.rvs(n=1,p=0.5,size=(200,))
 
+    return data, target
+
+def data_pattern4(random_state=2019):
+    '''
+    data4
+    null case
+    全て(5次元)独立(正規分布)でやる
+    '''
+
+    np.random.seed(seed=random_state)
+    columns=[]
+    
+    #正規分布
+    norm=stats.norm
+    data=norm.rvs(loc=0, scale=1,size=(200,5))
+
+    # targetの生成
+    binom=stats.binom
+    target=binom.rvs(n=1,p=0.5,size=(200,))
+
+    return data, target
+
+def data_pattern5(random_state=2019):
+    '''
+    data5
+    null case
+    5次元のうち、2次元だけdependancyをもたせる
+    '''
+
+    np.random.seed(seed=random_state)
+    columns=[]
+    
+    #正規分布
+    norm=stats.norm
+    data=norm.rvs(loc=0, scale=1,size=(200,4))
+    
+    # make dependancy
+    dep=np.exp(data[:,-1]) #指数をかませることで変換する
+    data= np.hstack([data,dep.reshape(-1,1)])
+    
+
+    # targetの生成
+    binom=stats.binom
+    target=binom.rvs(n=1,p=0.5,size=(200,))
+
+    return data, target
+
+def data_pattern6(random_state=2019):
+    '''
+    data6
+    power case
+    
+    0 -> N([-1]*5,2*np.eye(5)) (分散は少し広めに取るか)
+    1 -> N([1]*5,2*np.eye(5)) (分散は少し広めに取るか)
+    というルールでデータを生成
+    '''
+
+    np.random.seed(seed=random_state)
+    columns=[]
+    
+    #正規分布
+    norm=stats.norm
+    positive=norm.rvs(loc=1,scale=3,size=(100,5))
+    negative=norm.rvs(loc=-1,scale=3,size=(100,5))
+    data=np.vstack([positive,negative])
+    
+    # target
+    target=np.array(([1]*100)+([0]*100))
+
+    return data, target
+
+def data_pattern7(random_state=2019):
+    '''
+    data7
+    power case
+    
+    0 -> N([-1]*5,2*np.eye(5)) (分散は少し広めに取るか)
+    1 -> N([1]*5,2*np.eye(5)) (分散は少し広めに取るか)
+    というルールでデータを生成
+    
+    ただし、最後の2つの次元には完全なdependancyをもたせる
+    '''
+
+    np.random.seed(seed=random_state)
+    columns=[]
+    
+    #正規分布
+    norm=stats.norm
+    positive=norm.rvs(loc=1,scale=3,size=(100,4))
+    negative=norm.rvs(loc=-1,scale=3,size=(100,4))
+    data=np.vstack([positive,negative])
+    dep=np.exp(data[:,-1]).reshape(-1,1)
+    data=np.hstack([data,dep])
+    
+    # target
+    target=np.array(([1]*100)+([0]*100))
 
     return data, target
