@@ -157,7 +157,7 @@ $\text{importance}_F = \Sigma_{\text{node} \in \text{nodes}_F} \Delta I_\text{no
 これから以下について詳細な人工データの設定と結果を見せていく。
 
 - データの解像度が低い場合
-- データにdependancyがある場合
+- 特徴量同士にdependancyがある場合
 - その他の結果
 
 
@@ -170,7 +170,7 @@ $\text{importance}_F = \Sigma_{\text{node} \in \text{nodes}_F} \Delta I_\text{no
 
 特徴量0がなにも丸め込んでいないもので、特徴量4がめちゃくちゃ丸め込んだ場合である。
 
-具体的には正規分布の3σ区間を以下の表に示す数で分割して数字を丸め込んだ。
+具体的には[-3,3]の区間(標準正規分布の3σ)を以下の表に示す数で分割して数字を丸め込んだ。
 
 
 
@@ -184,7 +184,9 @@ $\text{importance}_F = \Sigma_{\text{node} \in \text{nodes}_F} \Delta I_\text{no
 
 ひと目でわかるように丸められている特徴量ほど重要度は下がっている。
 
-#### ![download](/Users/denkenhii/Documents/blog/bais_of_feature_importances/assets/download-3091104.png)
+
+
+![bais_in_resolution](/Users/denkenhii/Documents/blog/bais_of_feature_importances/assets/bais_in_resolution.png)
 
 
 
@@ -196,7 +198,7 @@ $\text{importance}_F = \Sigma_{\text{node} \in \text{nodes}_F} \Delta I_\text{no
 
 
 
-#### データにdependancyがある場合
+#### 特徴量同士にdependancyがある場合
 
 ##### データ生成の設定
 
@@ -216,9 +218,7 @@ $\text{importance}_F = \Sigma_{\text{node} \in \text{nodes}_F} \Delta I_\text{no
 
 互いに依存性をもつ3,4は特徴量重要度が減少する結果が出てきた。
 
-![download-1](/Users/denkenhii/Documents/blog/bais_of_feature_importances/assets/download-1.png)
-
-
+![bias_in_dependancy](/Users/denkenhii/Documents/blog/bais_of_feature_importances/assets/bias_in_dependancy.png)
 
 聡明な読者の皆様なら決定木がスケーリングに依存しないことをご存知だろう。なので特徴量3と4は決定木からすると全く同じ内容を示すことになる。そのとき、特徴量3で分割しようと特徴量4で分割しようと結果は変わらない。したがって特徴量3,4で重要度を互いに奪い合う結果になってしまう。
 
@@ -327,7 +327,6 @@ https://explained.ai/rf-importance/index.html
 バイアスは
 
 - その特徴量のデータの解像度が低い場合(取りうる数値が荒い)
-
 - 各次元が独立ではない場合
 
 に生じる。
@@ -362,7 +361,7 @@ https://github.com/masakiaota/blog/tree/master/bais_of_feature_importances/src
 
 
 
-ちなみにExtremely Randomized Treesでもバイアスは確認できた。
+ちなみにExtremely Randomized Treesでもバイアスは確認できたことを報告しておく。
 
 
 
