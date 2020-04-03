@@ -71,17 +71,26 @@ def normal_learning(X_train, y_train, X_test, y_test):
     return clf.score(X_test, y_test)
 
 
-def train_without_noisy_labels(X_train, y_train, X_test, y_test):
+def ret_trainedCLclass(X_train, y_train, X_test, y_test):
     model = baseclf(**params)
     clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
     clf.fit(X_train, y_train)
+    return clf
+
+
+def train_without_noisy_labels(X_train, y_train, X_test, y_test, clf=None):
+    if clf is None:
+        model = baseclf(**params)
+        clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
+        clf.fit(X_train, y_train)
     return clf.score(X_test, y_test)
 
 
-def train_noisy_to_pseudo(X_train, y_train, X_test, y_test):
+def train_noisy_to_pseudo(X_train, y_train, X_test, y_test, clf=None):
     model = baseclf(**params)
-    clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
-    clf.fit(X_train, y_train)
+    if clf is None:
+        clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
+        clf.fit(X_train, y_train)
 
     # trainのcorruptedにだけpseudo
     X_with_noise = X_train[clf.noise_mask]
@@ -93,10 +102,11 @@ def train_noisy_to_pseudo(X_train, y_train, X_test, y_test):
     return model.score(X_test, y_test)
 
 
-def train_test_and_noisy_to_pseudo(X_train, y_train, X_test, y_test):
+def train_test_and_noisy_to_pseudo(X_train, y_train, X_test, y_test, clf=None):
     model = baseclf(**params)
-    clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
-    clf.fit(X_train, y_train)
+    if clf is None:
+        clf = LearningWithNoisyLabels(clf=model, seed=seed, n_jobs=cpu_count())
+        clf.fit(X_train, y_train)
 
     # trainのcorruptedとtestの両方をpseudoにする
     X_with_noise = X_train[clf.noise_mask]
@@ -125,15 +135,19 @@ for i, (train_idx, test_idx) in enumerate(cv.split(X, y)):
     result["ML:noisy"].append(
         normal_learning(X_train, y_train_corrupted, X_test, y_test)
     )
+    clclf_trained = ret_trainedCLclass(
+        X_train, y_train_corrupted, X_test, y_test)
     result["CL:wituout noisy labels"].append(
-        train_without_noisy_labels(X_train, y_train_corrupted, X_test, y_test)
+        train_without_noisy_labels(
+            X_train, y_train_corrupted, X_test, y_test, clf=clclf_trained)
     )
     result["CL:pseudo for noisy labels"].append(
-        train_noisy_to_pseudo(X_train, y_train_corrupted, X_test, y_test)
+        train_noisy_to_pseudo(X_train, y_train_corrupted,
+                              X_test, y_test, clf=clclf_trained)
     )
     result["CL:pseudo for noisy labels and test set"].append(
         train_test_and_noisy_to_pseudo(
-            X_train, y_train_corrupted, X_test, y_test)
+            X_train, y_train_corrupted, X_test, y_test, clf=clclf_trained)
     )
     print()
     print("end of", i, "th oof.")
