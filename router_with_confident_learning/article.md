@@ -159,9 +159,82 @@ p(given=i|true=j) =
 | f1-score  | 0.89        |
 
 
-### cleanlabの一部よく使いそうな機能の解説
+### cleanlabの一部機能の解説
+
+#### 学習に関して
+
+`LearningWithNoisyLabels`はcleanlabの目玉機能だ。
+
+```python
+model=LogisticRegression(multi_class='auto')
+clf=LearningWithNoisyLabels(clf=model)
+clf.fit(X_train,y_train_noisy)
+```
+これだけで、CL:without noisesに示した黄色枠の処理を行ってくれる。
+
+どのサンプルがnoiseと推定されたかは`clf.noise_mask`を見れば良い。
+
+
+#### データ生成に関して
+noisy labelの性能を図るために、今回のように自分でノイズを生成したい人たちがる(研究者とか)。それを手助けしてくれる関数も存在する。
+
+今回用いたノイズ行列p(given=i|true=j)は以下のコードで生成できる。注意点としてはpyという真のyについてvalue countsした配列を果たさなければ行けない点だろう。
+```python
+generate_noise_matrix_from_trace(
+    4, 3, min_trace_prob=0.6, frac_zero_noise_rates=0.5, py=py, seed=seed)
+```
+
+上記のノイズ行列は乱数でなくても自分で設定しても構わない。それができたら今度は実際にラベルを汚染させる作業である。これの機能も以下を叩くだけである。
+
+```python
+generate_noisy_labels(y_train, noise_matrix)
+```
+
+#### 今回の実験の実装
+
+今回の実験のコードをおいておく。サーバーで回して3時間ぐらいかかったのでノパソで回すのは非推奨...。
+
+https://github.com/masakiaota/blog/blob/master/router_with_confident_learning/src/experiments.py
+
+cross validationなしの簡単な実験は以下のnotebookにまとめている。一つ一つなにをやっているかはnotebookを見たほうがわかりやすいだろう。
+
+https://github.com/masakiaota/blog/tree/master/router_with_confident_learning/notebooks
+
+(reuterがrouterに間違ってたりするのはご愛嬌)
 
 ### まとめ
 
+- ICML2020 Confident Learning の効果を、人工的にノイズを作ることで検証した。
+- RCV1-v2という高次元かつ疎なデータを用いた。
+- 5つの実験を計画し結果は以下になった。
+
+| method\                           | mean  (std)         |
+| --------------------------------- | ------------------- |
+| ML:clean  (ideal performance)     | 0.9744 (0.0004)     |
+|                                   |                     |
+| ML:noisy   (baseline performance) | 0.9536 (0.0007)     |
+| CL:wituout noises                 | 0.9598 (0.0004)     |
+| CL:pseudo for noises              | **0.9626** (0.0006) |
+| CL:pseudo for noises and test     | **0.9625** (0.0005) |
+
+- CLで単純にnoiseを取り除くだけでも効果があった。
+- Pseudo-labelingと組み合わせることで、更に性能が向上した。このように、CLはと他の手法は組み合わせやすく、これにより性能がさらに向上する可能性を秘めている。
 
 ### 参考
+論文
+
+https://arxiv.org/abs/1911.00068
+
+論文著者ブログ
+
+https://l7.curtisnorthcutt.com/confident-learning
+
+https://l7.curtisnorthcutt.com/cleanlab-python-package
+
+自分の論文解説
+
+https://aotamasaki.hatenablog.com/entry/confident_learning
+
+RCV1-v2データセットに関して
+
+http://www.jmlr.org/papers/v5/lewis04a.html
