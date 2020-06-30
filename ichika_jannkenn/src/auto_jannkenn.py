@@ -1,12 +1,9 @@
 from selenium import webdriver  # brew cask でchromedriverのinstallが必要
-from selenium.webdriver.common.keys import Keys
-import time
 from time import sleep
 import datetime
 import schedule
 from pathlib import Path
 from random import choice
-
 hands = [0, 1, 2]  # グーチョキパー
 
 
@@ -28,17 +25,19 @@ def do_jannkenn():
     sleep(1)
 
     # じゃんけん済みだったらなにもせず次の回まで待機
-    element_janken = driver.find_elements_by_id('janken')
-    if element_janken[0].get_attribute('innerHTML').count('じゃんけん済み'):
-        pass  # なにもしない処理をする
-    else:
+    is_done = driver.find_element_by_id('janken')\
+        .get_attribute('innerHTML')\
+        .count('じゃんけん済み')
+
+    if not is_done:
+        element_janken_select = driver.find_element_by_id('janken-select')\
+            .find_elements_by_tag_name('a')
         # じゃんけんする
-        hand = choice(hands)
-        element_janken[hand].click()  # TODO 要素みて正しいかverify
-        # driver.find_element_by_link_text("hoge").click()
+        hand = choice(hands)  # 乱数で手を決める
+        element_janken_select[hand].click()
+        sleep(1)
 
     # ブラウザを終了
-    # driver.close()
     driver.quit()
 
 
@@ -49,7 +48,7 @@ schedule.every().day.at('20:05').do(do_jannkenn)
 
 while True:
     schedule.run_pending()
-    time.sleep(60 * 10)  # 10分おきに実行可能かcheck
+    sleep(60 * 10)  # 10分おきに実行可能かcheck
 
 
 # test #ok!
