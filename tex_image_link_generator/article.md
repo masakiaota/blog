@@ -20,41 +20,6 @@ https://tex-image-link-generator.herokuapp.com/
 
 noteやhatenablogなどのmarkdown(HTML)が使えるサービスに転用することもできるはず。
 
-
-### 作成のモチベーション
-
-githubに数式を埋め込む方法をかえるるるさんに教えていただいたのがきっかけ
-https://twitter.com/kaeru_nantoka/status/1288266193829163008?s=20
-
-しかし、`<img src="https://render.githubusercontent.com/render/math?math={hogehoge}>`に直接数式を打っていくのは個人的に苦痛だった。
-
-
-短い数式ならまだしも、長い数式になると視認性が低くなるからだ。さらに致命的なのが`+`を`%2B`に置き換えなければ行けない点だ(これはURL中の`+`が空白を意味することに原因がある)。
-
-さらには後述する関連ツールがどれも自分の要望を満たさなかったために自分でつくろうとなった。
-
-### 関連するツール
-
-この方法を発見した人(?)が開発したツール。しかし現時点(2020/08/09)では、アクセスできずどのようなものだったかはわからない。
-https://alexanderrodin.com/github-latex-markdown
-
-
-
-自分がやっていることの上位互換であり、自分の要望をほぼ満たしている。しかし解像度が荒くてぼやけるという1点において満足行かなかった。
-https://www.codecogs.com/latex/eqneditor.php
-
-
-ここまで来たらwebアプリにしない？？あと、オリジナルの数式の情報を`<img>`タグに残してほしかった (あとで編集するときに必要な情報でしょ？)
-https://jsfiddle.net/8ndx694g/
-
-
-地味に便利そうなVSCode拡張。VSCodeをいつでも使うとは限らないのでwebアプリにしてほしかった。
-https://marketplace.visualstudio.com/items?itemName=MeowTeam.vscode-math-to-image
-
-
-ページ内のTeX表記を検知して数式に変換してくれるChrome拡張。良さげだけど共有するすべての人がこれをインストールしてるわけではないので...
-https://ezoeryou.github.io/blog/article/2017-04-26-mathjax-load.html
-
 ### 使い方
 
 ![](input.png)
@@ -90,6 +55,41 @@ R(g) &= \frac{1}{n} \sum_{i=1}^{n} \ell(y_i,g(x_i))\\
 ```
 
 数式の本体自体は`alt`属性に格納されているため、あとで編集することになってもURLを読解する必要はないだろう。
+
+
+### 作成のモチベーション
+
+githubに数式を埋め込む方法をかえるるるさんに教えていただいたのがきっかけ
+https://twitter.com/kaeru_nantoka/status/1288266193829163008?s=20
+
+しかし、`<img src="https://render.githubusercontent.com/render/math?math={hogehoge}>`に直接数式を打っていくのは個人的に苦痛だった。
+
+
+短い数式ならまだしも、長い数式になると視認性が低くなるからだ。さらに致命的なのが`+`を`%2B`に置き換えなければ行けない点だ(これはURL中の`+`が空白を意味することに原因がある)。
+
+さらには後述する関連ツールがどれも自分の要望を満たさなかったために自分でつくろうとなった。
+
+### 関連するツール
+
+この方法を発見した人(?)が開発したツール。しかし現時点(2020/08/09)では、アクセスできずどのようなものだったかはわからない。
+https://alexanderrodin.com/github-latex-markdown
+
+
+
+自分がやっていることの上位互換であり、自分の要望をほぼ満たしている。しかし解像度が荒くてぼやけるという1点において満足行かなかった。
+https://www.codecogs.com/latex/eqneditor.php
+
+
+ここまで来たらwebアプリにしない？？あと、オリジナルの数式の情報を`<img>`タグに残してほしかった (あとで編集するときに必要な情報でしょ？)
+https://jsfiddle.net/8ndx694g/
+
+
+地味に便利そうなVSCode拡張。VSCodeをいつでも使うとは限らないのでwebアプリにしてほしかった。
+https://marketplace.visualstudio.com/items?itemName=MeowTeam.vscode-math-to-image
+
+
+ページ内のTeX表記を検知して数式に変換してくれるChrome拡張。良さげだけど共有するすべての人がこれをインストールしてるわけではないので...
+https://ezoeryou.github.io/blog/article/2017-04-26-mathjax-load.html
 
 
 ### まとめ
