@@ -52,6 +52,9 @@ https://jsfiddle.net/8ndx694g/
 https://marketplace.visualstudio.com/items?itemName=MeowTeam.vscode-math-to-image
 
 
+ページ内のTeX表記を検知して数式に変換してくれるChrome拡張。良さげだけど共有するすべての人がこれをインストールしてるわけではないので...
+https://ezoeryou.github.io/blog/article/2017-04-26-mathjax-load.html
+
 ### 使い方
 
 ![](input.png)
