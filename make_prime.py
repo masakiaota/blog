@@ -26,7 +26,7 @@ def _make_prime_numbers(N: int):
     return primes
 
 
-with open('primes_10^7.txt', 'w') as f:
-    res = _make_prime_numbers(10**7)
+with open('primes_10^6.txt', 'w') as f:
+    res = _make_prime_numbers(10**6)
     print(res, file=f)
 print(len(res))
