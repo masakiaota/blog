@@ -111,3 +111,4 @@ vae/vae_cnn
 events.out.tfevents*
 report_private.md
 userdata/
+.DS_Store
